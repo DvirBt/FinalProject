@@ -6,10 +6,15 @@ package Entities;
 public abstract class Person {
     protected Role role;
 
-    public Person(Role role)
+    public Person(int i)
     {
-        this.role = role;
+        role = Role.SelectRoleByInteger(i);
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     public abstract void allowedActions();
+
 }

@@ -1,3 +1,6 @@
+import Entities.Person;
+import Entities.Role;
+import Exceptions.InvalidChoice;
 import Exceptions.ReadFileError;
 
 import java.io.*;
@@ -6,8 +9,9 @@ import java.util.ArrayList;
 public class RealEstate {
 
     // Create a Singleton class for system
-    private final static RealEstate system = null;
-
+    private final static RealEstate realEstate = new RealEstate();
+    //private Role user;
+    private Person user;
     private ArrayList<Asset> listOfAssets;
 
     // Creating a private constructor
@@ -15,14 +19,24 @@ public class RealEstate {
     private RealEstate()
     {
         readAssets();
+        user = null;
     }
 
-    // Create a new instance
+    // Singleton
     public static RealEstate getInstance()
     {
-
+        return realEstate;
     }
 
+    public static void setInstance(Person p)
+    {
+        user = p;
+    }
+
+    public ArrayList<Asset> getListOfAssets()
+    {
+        return listOfAssets;
+    }
 
     /**
      * This function gets a street and a boulevard and adds a new asset if the location on the grid is available.
@@ -69,7 +83,7 @@ public class RealEstate {
         }
     }
 
-    public Asset getAsset()
+    //public Asset getAsset()
 
     /**
      * This function shows all the existing assets in the terminal
@@ -95,15 +109,22 @@ public class RealEstate {
      */
     public boolean addAssetToFile(Asset asset)
     {
-        try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Assets.txt"));
-            //String[] addAsset = asset.toString().split(",");
-            writer.write(asset.toString() + "\n"); // NEED TO CHECK HERE THE STRING
-            writer.close();
-            return true;
-        } catch (IOException e){
-            e.printStackTrace();
+        if (user == Role.Agent)
+        {
+            try{
+                BufferedWriter writer = new BufferedWriter(new FileWriter("Assets.txt"));
+                //String[] addAsset = asset.toString().split(",");
+                writer.write(asset.toString() + "\n"); // NEED TO CHECK HERE THE STRING
+                writer.close();
+                return true;
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+
+            return false;
         }
+
+        else
 
         return false;
     }
@@ -115,7 +136,13 @@ public class RealEstate {
 
     public boolean updateAsset(int i)
     {
-        Asset
+        //Asset
+    }
+
+    public boolean removeAsset(int i)
+    {
+        if (i > listOfAssets.size() || i < 1)
+            throw new InvalidChoice("The integer must be at least")
     }
 
 

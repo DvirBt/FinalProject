@@ -17,7 +17,7 @@ public enum Role {
      * @param i - the integer
      * @return - the role.
      */
-    public Role getRole(int i)
+    public static Role SelectRoleByInteger(int i)
     {
         switch (i)
         {

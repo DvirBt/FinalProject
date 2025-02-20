@@ -2,7 +2,9 @@
 /**
  * This class represents an apartment in the system.
  */
-public class Apartment extends Address{
+public class Apartment{
 
-    private Address address;
+    //private Address address;
+    private int inner_apartments;
+
 }

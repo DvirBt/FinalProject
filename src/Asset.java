@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Asset{
 
     // Properties
@@ -6,6 +8,8 @@ public class Asset{
     private int price; // $
     private boolean sold; // True means this asset is sold, False otherwise.
     private Address address;
+
+    private ArrayList<Apartment> apartmentsList = null;
 
     // Constructors
 
@@ -56,6 +60,15 @@ public class Asset{
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public boolean addApartment(Apartment apartment)
+    {
+        if (apartment == null)
+            throw new NullPointerException("Apartment is null!");
+
+        apartmentsList.add(apartment);
+        return true;
     }
 
     public String toString()
