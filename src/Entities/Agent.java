@@ -1,4 +1,6 @@
 package Entities;
 
-public class Agent {
+public class Agent implements Person{
+
+
 }

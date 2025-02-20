@@ -3,28 +3,13 @@ package Entities;
 /**
  * This class represents a person in the system.
  */
-public class Person {
+public abstract class Person {
+    protected Role role;
 
-    // Properties
-
-    private String name;
-    private String email;
-
-    public Person(String name, String email)
+    public Person(Role role)
     {
-        this.name = name;
-        this.email = email;
+        this.role = role;
     }
 
-    // Getters
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
+    public abstract void allowedActions();
 }
