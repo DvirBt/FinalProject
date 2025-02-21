@@ -1,4 +1,4 @@
-package Exceptions;
+package RealEstate.Exceptions;
 
 public class ReadFileError extends RuntimeException{
     public ReadFileError()

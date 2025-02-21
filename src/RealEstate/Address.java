@@ -1,3 +1,4 @@
+package RealEstate;
 
 /**
  * This class represents an address of an asset as a point in the grid.

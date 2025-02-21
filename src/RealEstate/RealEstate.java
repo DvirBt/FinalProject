@@ -1,7 +1,8 @@
-import Entities.Person;
-import Entities.Role;
-import Exceptions.InvalidChoice;
-import Exceptions.ReadFileError;
+package RealEstate;
+
+import RealEstate.Entities.Person;
+import RealEstate.Entities.Role;
+import RealEstate.Exceptions.InvalidChoice;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ public class RealEstate {
     //private Role user;
     private Person user;
     private ArrayList<Asset> listOfAssets;
+
+    private ArrayList<Building> listOfBuildings;
 
     // Creating a private constructor
 
@@ -44,14 +47,14 @@ public class RealEstate {
      * @param boulevard - the boulevard
      * @return True if the given location is available. Otherwise, returns false.
      */
-    public boolean addAsset(int street, int boulevard, double area, int price, boolean sold)
+    public boolean addAsset(int street, int boulevard, double area, int price, boolean sold, ArrayList<Integer> innerApartments)
     {
         for (int i = 0; i < listOfAssets.size(); i++)
         {
             if (listOfAssets.get(i).getAddress().getStreet() == street && listOfAssets.get(i).getAddress().getBoulevard() == boulevard)
                 return false;
         }
-        Asset asset = new Asset(area, price, sold, street, boulevard);
+        Asset asset = new Asset(area, price, sold, street, boulevard, innerApartments);
         listOfAssets.add(asset);
         return true;
     }
@@ -63,7 +66,7 @@ public class RealEstate {
     {
         ArrayList<Asset> readAssets = new ArrayList<>();
         try{
-            BufferedReader reader = new BufferedReader(new FileReader("Assets.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("Files/Assets.txt"));
             String line = reader.readLine();
             while (line != null)
             {
@@ -73,7 +76,11 @@ public class RealEstate {
                 boolean sold = Boolean.parseBoolean(createAsset[2]);
                 int street = Integer.parseInt(createAsset[3]);
                 int boulevard = Integer.parseInt(createAsset[4]);
-                Asset asset = new Asset(area, price, sold, street, boulevard);
+                ArrayList<Integer> innerApartments = new ArrayList<>();
+                for (int i = 5; i < createAsset.length; i++)
+                    innerApartments.add(Integer.parseInt(createAsset[i]));
+
+                Asset asset = new Asset(area, price, sold, street, boulevard, innerApartments);
                 listOfAssets.add(asset);
                 line = reader.readLine();
             }
@@ -83,7 +90,7 @@ public class RealEstate {
         }
     }
 
-    //public Asset getAsset()
+    //public RealEstate.RealEstate.Asset getAsset()
 
     /**
      * This function shows all the existing assets in the terminal
@@ -109,10 +116,10 @@ public class RealEstate {
      */
     public boolean addAssetToFile(Asset asset)
     {
-        if (user == Role.Agent)
+        if (user.getRole() == Role.Agent)
         {
             try{
-                BufferedWriter writer = new BufferedWriter(new FileWriter("Assets.txt"));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("Files/Assets.txt"));
                 //String[] addAsset = asset.toString().split(",");
                 writer.write(asset.toString() + "\n"); // NEED TO CHECK HERE THE STRING
                 writer.close();
@@ -124,25 +131,31 @@ public class RealEstate {
             return false;
         }
 
-        else
-
         return false;
-    }
-
-    public Asset getAssetInRow(int i)
-    {
-
     }
 
     public boolean updateAsset(int i)
     {
-        //Asset
+        if (listOfAssets == null)
+            throw new NullPointerException("No assets available!");
+
+        System.out.println("Enter the new details MR,Price,Sold?,Street,Boulevard,Number of inner apartments");
+        System.out.println("For example: 60,660000,true,2,3,3");
+
+
     }
 
     public boolean removeAsset(int i)
     {
         if (i > listOfAssets.size() || i < 1)
-            throw new InvalidChoice("The integer must be at least")
+            throw new InvalidChoice("The given input is not in range!");
+
+        // remove from list
+        listOfAssets.remove(i-1);
+
+        // remove from the file
+
+
     }
 
 

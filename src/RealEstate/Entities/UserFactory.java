@@ -1,4 +1,4 @@
-package Entities;
+package RealEstate.Entities;
 
 public class UserFactory {
 
@@ -9,16 +9,16 @@ public class UserFactory {
         person = null;
     }
 
-    public Person createUserType(int i)
+    public Person createUserType(String name, int i)
     {
         switch (i)
         {
             case 1:
-                return new Agent();
+                return new Agent(name);
             case 2:
-                return new Buyer();
+                return new Buyer(name);
             case 3:
-                return new Seller();
+                return new Seller(name);
             default:
         }
 

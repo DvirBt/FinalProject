@@ -1,6 +1,9 @@
-import Entities.Person;
-import Entities.UserFactory;
-import Exceptions.InvalidChoice;
+package RealEstate;
+
+import RealEstate.Entities.Person;
+import RealEstate.Entities.UserFactory;
+import RealEstate.Exceptions.InvalidChoice;
+import RealEstate.RealEstate;
 
 import java.util.Scanner;
 
@@ -14,8 +17,10 @@ public class Main {
         while (!stop)
         {
             int choice = makeChoice();
+            System.out.println("Enter your name");
+            String name = reader.nextLine();
             UserFactory userFactory = new UserFactory();
-            Person p = userFactory.createUserType(choice);
+            Person p = userFactory.createUserType(name, choice);
             RealEstate.setInstance(p);
         }
 
@@ -24,7 +29,12 @@ public class Main {
 
     private static void loginSystem()
     {
-        System.out.println("Please enter as what you want to login to the system:\n1. Agent\n2. Buyer\n 3. Seller");
+        System.out.println("Login as:\n1. Agent\n2. Buyer\n 3. Seller");
+    }
+
+    private static void showActions()
+    {
+        System.out.println("The available actions:\n1.");
     }
 
     private static int makeChoice()
@@ -33,7 +43,7 @@ public class Main {
         Scanner reader = new Scanner(System.in);
         loginSystem();
         int input = reader.nextInt();
-        while (true)
+        while (input != 9)
         {
             try
             {

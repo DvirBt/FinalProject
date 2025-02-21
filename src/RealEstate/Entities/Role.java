@@ -1,4 +1,4 @@
-package Entities;
+package RealEstate.Entities;
 
 public enum Role {
     Agent(1),

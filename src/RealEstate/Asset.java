@@ -1,3 +1,5 @@
+package RealEstate;
+
 import java.util.ArrayList;
 
 public class Asset{
@@ -8,25 +10,19 @@ public class Asset{
     private int price; // $
     private boolean sold; // True means this asset is sold, False otherwise.
     private Address address;
+    //private int innerApartments; // represents the number of inner apartments in an asset
 
-    private ArrayList<Apartment> apartmentsList = null;
+    private ArrayList<Integer> innerApartments; // represents the number of inner apartments in an asset
 
     // Constructors
 
-    public Asset(double area, int price, boolean sold, Address address)
-    {
-        this.area = area;
-        this.price = price;
-        this.sold = sold;
-        this.address = new Address(address.getStreet(), address.getBoulevard());
-    }
-
-    public Asset(double area, int price, boolean sold, int street, int boulevard)
+    public Asset(double area, int price, boolean sold, int street, int boulevard, ArrayList<Integer> innerApartments)
     {
         this.area = area;
         this.price = price;
         this.sold = sold;
         this.address = new Address(street, boulevard);
+        this.innerApartments = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -62,18 +58,18 @@ public class Asset{
         this.address = address;
     }
 
-    public boolean addApartment(Apartment apartment)
-    {
-        if (apartment == null)
-            throw new NullPointerException("Apartment is null!");
+    public void setInnerApartments(ArrayList<Integer> innerApartments) {
+        this.innerApartments = innerApartments;
+    }
 
-        apartmentsList.add(apartment);
-        return true;
+    public ArrayList<Integer> getInnerApartments() {
+        return innerApartments;
     }
 
     public String toString()
     {
-        return "Area: " + this.area + " | " + "Price: " + this.price + " | " +"Sold?: " + this.sold + " | " + "Address: " + address.getBoulevard() + "," + address.getStreet();
+        return "Area: " + this.area + " | " + "Price: " + this.price + " | " +"Sold?: " + this.sold + " | " + "RealEstate.RealEstate.Address: " + address.getBoulevard() + "," + address.getStreet();
+        // maybe add the rest of the address?
     }
 
 }

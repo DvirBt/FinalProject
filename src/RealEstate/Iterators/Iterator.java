@@ -1,3 +1,7 @@
+package RealEstate.Iterators;
+
+import RealEstate.Asset;
+
 import java.util.ArrayList;
 
 public interface Iterator {

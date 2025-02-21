@@ -1,4 +1,4 @@
-package Exceptions;
+package RealEstate.Exceptions;
 
 public class UnauthorizedUser extends RuntimeException{
     public UnauthorizedUser()
