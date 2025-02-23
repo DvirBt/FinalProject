@@ -4,9 +4,9 @@ import RealEstate.Asset;
 
 public class Seller extends Person{
 
-    public Seller(String name)
+    public Seller(String firstName, String lastName)
     {
-        super(name, Role.Seller);
+        super(firstName, lastName, Role.Seller);
     }
 
     public void sendMessage(String message)

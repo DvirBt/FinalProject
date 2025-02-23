@@ -9,16 +9,16 @@ public class UserFactory {
         person = null;
     }
 
-    public Person createUserType(String name, int i)
+    public Person createUserType(String firstName, String lastName, int i)
     {
         switch (i)
         {
             case 1:
-                return new Agent(name);
+                return new Agent(firstName, lastName);
             case 2:
-                return new Buyer(name);
+                return new Buyer(firstName, lastName);
             case 3:
-                return new Seller(name);
+                return new Seller(firstName,lastName);
             default:
         }
 

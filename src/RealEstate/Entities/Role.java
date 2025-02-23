@@ -3,9 +3,8 @@ package RealEstate.Entities;
 public enum Role {
     Agent(1),
     Buyer(2),
-    Seller(3),
-    Exit(4);
-    final int role;
+    Seller(3);
+    private final int role;
 
     Role(int role)
     {
@@ -24,7 +23,6 @@ public enum Role {
             case 1: return Role.Agent;
             case 2: return Role.Buyer;
             case 3: return Role.Seller;
-            case 4: return Role.Exit;
             default:
         }
 

@@ -6,9 +6,9 @@ public class Agent extends Person{
 
     private ArrayList<String> notifications;
 
-    public Agent(String name)
+    public Agent(String firstName, String lastName)
     {
-        super(name, Role.Agent);
+        super(firstName, lastName, Role.Agent);
         notifications = new ArrayList<>();
     }
 

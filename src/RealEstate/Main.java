@@ -12,55 +12,32 @@ public class Main {
         System.out.println("Hello!");
         // create a Scanner to read the inputs
         Scanner reader = new Scanner(System.in);
-        loginSystem();
+        RealEstate realEstate = RealEstate.getInstance();
+        realEstate.login();
         boolean stop = false;
         while (!stop)
         {
-            int choice = makeChoice();
-            System.out.println("Enter your name");
-            String name = reader.nextLine();
-            UserFactory userFactory = new UserFactory();
-            Person p = userFactory.createUserType(name, choice);
-            RealEstate.setInstance(p);
+            System.out.println("Available actions:\n1. See assets\n2. Edit assets\n3. Remove asset\n4. Notify agent\n5. Pull assets\n6. Close a deal\n9. Exist");
+            int choice = reader.nextInt();
+            switch (choice)
+            {
+                case 1:
+                    realEstate.showAssets();
+                    break;
+                case 2:
+                    realEstate.updateAsset();
+                    break;
+                case 3:
+                    realEstate.removeAsset();
+                    break;
+                case 9:
+                    stop = true;
+                default:
+                    System.out.println("Invalid input, try again!");
+            }
         }
 
         System.out.println("Exit successfully!");
-    }
-
-    private static void loginSystem()
-    {
-        System.out.println("Login as:\n1. Agent\n2. Buyer\n 3. Seller");
-    }
-
-    private static void showActions()
-    {
-        System.out.println("The available actions:\n1.");
-    }
-
-    private static int makeChoice()
-    {
-        // create a Scanner to read the inputs
-        Scanner reader = new Scanner(System.in);
-        loginSystem();
-        int input = reader.nextInt();
-        while (input != 9)
-        {
-            try
-            {
-                if (input < 4 && input > 0)
-                    return input;
-
-                throw new InvalidChoice("The given input is invalid!\nPlease enter a number between 1-3");
-            }
-            catch (InvalidChoice e)
-            {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public removeAnAsset()
-    {
-
+        while (true);
     }
 }

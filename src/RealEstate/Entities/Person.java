@@ -5,18 +5,20 @@ package RealEstate.Entities;
  */
 public abstract class Person {
 
-    protected String name;
+    protected String firstName;
+    protected String lastName;
     protected Role role;
 
-    public Person(String name)
+    public Person(String firstName, String lastName)
     {
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         role = null;
     }
 
-    public Person(String name, Role role)
+    public Person(String firstName, String lastName, Role role)
     {
-        this(name);
+        this(firstName, lastName);
         this.role = role;
     }
 
@@ -24,7 +26,26 @@ public abstract class Person {
     {
         return role;
     }
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    /**
+     * This function checks if a given first name and last name equals to this person.
+     * @param firstName - the first name.
+     * @param lastName - the last name.
+     * @return true if this is the same person. Otherwise returns false.
+     */
+    public boolean samePerson(String firstName, String lastName)
+    {
+        if (this.firstName.equals(firstName) && this.lastName.equals(lastName))
+            return true;
+
+        return false;
     }
 }

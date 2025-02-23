@@ -8,9 +8,9 @@ public class Buyer extends Person{
 
     private ArrayList<Asset> assets;
 
-    public Buyer(String name)
+    public Buyer(String firstName, String lastName)
     {
-        super(name, Role.Buyer);
+        super(firstName, lastName, Role.Buyer);
         assets = new ArrayList<>();
 
     }
