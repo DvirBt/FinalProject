@@ -13,10 +13,4 @@ public class Seller extends Person{
     {
 
     }
-
-    // Should be in RealEstate? and check the status of the user -> authorized
-    public void deleteAsset(Asset asset)
-    {
-
-    }
 }

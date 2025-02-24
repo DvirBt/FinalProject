@@ -3,7 +3,7 @@ package RealEstate;
 import java.util.ArrayList;
 
 public enum AdditionalService {
-    Party("Party", 1000),
+    Guarantee("Guarantee", 1000),
     Clean("Clean", 2500),
     Transfer("Transfer", 5000),
     Decorate("Decorate", 15000);
@@ -18,7 +18,7 @@ public enum AdditionalService {
     }
 
     // Getters
-    public String getService() {
+    public String getServiceType() {
         return service;
     }
 
@@ -36,7 +36,7 @@ public enum AdditionalService {
     {
         switch (i)
         {
-            case 1: return AdditionalService.Party;
+            case 1: return AdditionalService.Guarantee;
             case 2: return AdditionalService.Clean;
             case 3: return AdditionalService.Transfer;
             case 4: return AdditionalService.Decorate;

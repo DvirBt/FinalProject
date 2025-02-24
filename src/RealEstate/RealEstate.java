@@ -3,6 +3,7 @@ package RealEstate;
 import RealEstate.Entities.*;
 import RealEstate.Exceptions.InvalidChoice;
 import RealEstate.Exceptions.UnAuthorizedUser;
+import RealEstate.Strategy.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,8 +28,13 @@ public class RealEstate {
 
     private RealEstate()
     {
+        listOfAssets = new ArrayList<>();
         initAssetsList();
+        listOfBuildings = new ArrayList<>();
         initBuildingsList();
+        agents = new ArrayList<>();
+        buyers = new ArrayList<>();
+        sellers = new ArrayList<>();
         initUsers();
         // switch and display options by role OR to general
     }
@@ -49,12 +55,13 @@ public class RealEstate {
         boolean found = false;
         while (!found)
         {
+            reader = new Scanner(System.in);
             System.out.println("Enter first name");
             String firstName = reader.nextLine();
             System.out.println("Enter last name");
             String lastName = reader.nextLine();
-            System.out.println("Login as:\n1. Agent\n2. Buyer\n 3. Seller");
-            int choice = makeChoice();
+            System.out.println("Login as:\n1. Agent\n2. Buyer\n3. Seller");
+            int choice = makeChoice(3);
             switch (choice)
             {
                 case 1:
@@ -92,26 +99,27 @@ public class RealEstate {
                     break;
 
                 default:
-                    System.out.println("Login failed, try again.");
             }
+
+            if (!found)
+                System.out.println("Unregistered user, try again!");
         }
 
-        System.out.println("Welcome back " + user.getFirstName() + user.getLastName());
+        System.out.println("\nWelcome back " + user.getFirstName() + " " + user.getLastName());
     }
 
-    private int makeChoice()
+    private int makeChoice(int num)
     {
-        // create a Scanner to read the inputs
-        Scanner reader = new Scanner(System.in);
-        int input = reader.nextInt();
         while (true)
         {
+            reader = new Scanner(System.in);
+            int input = reader.nextInt();
             try
             {
-                if (input < 4 && input > 0)
+                if (input <= num && input >= 0)
                     return input;
 
-                throw new InvalidChoice("The given input is invalid!\nPlease enter a number between 1-3");
+                throw new InvalidChoice("The given input is invalid!\nPlease enter a number between 0-" + num);
             }
             catch (InvalidChoice e)
             {
@@ -128,12 +136,8 @@ public class RealEstate {
 
     public void initUsers()
     {
-        agents = new ArrayList<>();
-        buyers = new ArrayList<>();
-        sellers = new ArrayList<>();
-
         try{
-            BufferedReader reader = new BufferedReader(new FileReader("Files/Users.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("src/RealEstate/Files/Users"));
             String line = reader.readLine();
             while (line != null)
             {
@@ -172,35 +176,27 @@ public class RealEstate {
     }
 
     /**
-     * This function checks if a given string of person data is a registered user.
-     * @param line - the given data.
-     * @return true if the person exists in the file. Otherwise returns false.
-     */
-    public boolean tryLogin(String line)
-    {
-        Person p = readUser(line);
-        if (!agents.contains(p) && !buyers.contains(p) && !sellers.contains(p))
-            return false;
-
-        return true;
-    }
-
-    /**
      * This function reads all assets from the file and initializes the assets list.
      */
     private void initAssetsList()
     {
+//        File file = new File("src/RealEstate/Files/Assets.txt");
+//        if (file.exists()) {
+//            System.out.println("File exists!");
+//        } else {
+//            System.out.println("File NOT found! Check the path.");
+//        }
         try{
-            BufferedReader reader = new BufferedReader(new FileReader("Files/Assets.txt"));
-            String line = reader.readLine();
+            BufferedReader read = new BufferedReader(new FileReader("src/RealEstate/Files/Assets.txt"));
+            String line = read.readLine();
             while (line != null)
             {
                 Asset asset = readAsset(line);
                 if (asset != null)
                     listOfAssets.add(asset);
-                line = reader.readLine();
+                line = read.readLine();
             }
-            reader.close();
+            read.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -211,7 +207,6 @@ public class RealEstate {
      */
     private void initBuildingsList()
     {
-        listOfBuildings = new ArrayList<>();
         boolean exist;
         for (int i = 0; i < listOfAssets.size(); i++)
         {
@@ -220,9 +215,9 @@ public class RealEstate {
             for (int j = 0; j < listOfBuildings.size(); j++)
             {
                 Building currentBuilding = listOfBuildings.get(j);
-                if (currentAsset.getAddress().equals(currentBuilding.getAddress()))
+                if (currentAsset.getAddress().equals(currentBuilding.getAddress()) && currentBuilding.isDivided())
                 {
-                    currentBuilding.addAsset(currentAsset);
+                    currentBuilding.add(currentAsset);
                     exist = true;
                     break;
                 }
@@ -234,24 +229,6 @@ public class RealEstate {
             }
         }
     }
-
-//    /**
-//     * This function gets a street and a boulevard and adds a new asset if the location on the grid is available.
-//     * @param street - the street
-//     * @param boulevard - the boulevard
-//     * @return True if the given location is available. Otherwise, returns false.
-//     */
-//    private boolean addAsset(int street, int boulevard, double area, int price, boolean sold, ArrayList<Integer> innerApartments)
-//    {
-//        for (int i = 0; i < listOfAssets.size(); i++)
-//        {
-//            if (listOfAssets.get(i).getAddress().getStreet() == street && listOfAssets.get(i).getAddress().getBoulevard() == boulevard)
-//                return false;
-//        }
-//        Asset asset = new Asset(area, price, sold, street, boulevard, innerApartments);
-//        listOfAssets.add(asset);
-//        return true;
-//    }
 
     /**
      * This functions gets a String as an asset input and transfers it to an asset object.
@@ -265,15 +242,17 @@ public class RealEstate {
 
         // maybe add try
         String[] createAsset = line.split(",");
-        double area = Double.parseDouble(createAsset[0]);
+        int area = Integer.parseInt(createAsset[0]);
         int price = Integer.parseInt(createAsset[1]);
         boolean sold = Boolean.parseBoolean(createAsset[2]);
-        int street = Integer.parseInt(createAsset[3]);
-        int boulevard = Integer.parseInt(createAsset[4]);
+        int boulevard = Integer.parseInt(createAsset[3]);
+        int street = Integer.parseInt(createAsset[4]);
         //ArrayList<Integer> innerApartments = new ArrayList<>();
 //        for (int i = 5; i < createAsset.length; i++)
 //            innerApartments.add(Integer.parseInt(createAsset[i]));
-        int innerApartments = Integer.parseInt(createAsset[5]);
+        int innerApartments = 1;
+        if (createAsset.length == 6)
+            innerApartments = Integer.parseInt(createAsset[5]);
         try{
             return new Asset(area, price, sold, street, boulevard, innerApartments);
         } catch (Exception e){
@@ -320,13 +299,14 @@ public class RealEstate {
             throw new NullPointerException("List is empty!");
 
         try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Files/Assets.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("src/RealEstate/Files/Assets.txt"));
 
             for(int i = 0; i < listOfAssets.size(); i++)
             {
-                writer.write(listOfAssets.get(i).toString() + "\n"); // NEED TO CHECK HERE THE STRING
-                writer.close();
+                String s = listOfAssets.get(i).getValues();
+                writer.write(s+ "\n"); // NEED TO CHECK HERE THE STRING
             }
+            writer.close();
             System.out.println("Update succeeded!");
         } catch (IOException e){
             e.printStackTrace();
@@ -336,13 +316,23 @@ public class RealEstate {
 
     /**
      * This function checks if the current user is authorized to perform such action.
-     * @param role - the required Role to perform the action.
-     * @throws UnAuthorizedUser - if the user is unauthorized to perform this action.
+     * @param role the required Role to perform the action.
+     * @return true if the user is authorized. Otherwise, returns false.
+     * @throws UnAuthorizedUser if the user is unauthorized to perform this action.
      */
-    public void authorize(Role role)
+    public boolean authorize(Role role)
     {
-        if (user.getRole() != role)
-            throw new UnAuthorizedUser();
+        try{
+            if (user.getRole() != role)
+                throw new UnAuthorizedUser();
+        } catch (UnAuthorizedUser e)
+        {
+            System.out.println(e.getMessage());
+            //e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     // Authorized functions of Agent - update an asset
@@ -359,58 +349,93 @@ public class RealEstate {
 
         // maybe add try
         String[] createAsset = line.split(",");
-        double area = Double.parseDouble(createAsset[0]);
+        int area = Integer.parseInt(createAsset[0]);
         int price = Integer.parseInt(createAsset[1]);
         boolean sold = Boolean.parseBoolean(createAsset[2]);
-        int street = Integer.parseInt(createAsset[3]);
-        int boulevard = Integer.parseInt(createAsset[4]);
-        int innerApartments = Integer.parseInt(createAsset[5]);
+        int boulevard = Integer.parseInt(createAsset[3]);
+        int street = Integer.parseInt(createAsset[4]);
+        int innerApartments = 0;
+        if (createAsset.length == 6)
+            innerApartments = Integer.parseInt(createAsset[5]);
 
-        if (area < 0)
-            throw new InvalidChoice("Area can't be negative!");
-        if (price <= 0)
-            throw new InvalidChoice("Price must be greater than 0!");
-        if (innerApartments <= 0)
-            throw new InvalidChoice("Inner apartments must be grater than 0!");
+        try {
+            if (area < 0)
+                throw new InvalidChoice("Area can't be negative!");
+            if (price <= 0)
+                throw new InvalidChoice("Price must be greater than 0!");
+            if (innerApartments < 0)
+                throw new InvalidChoice("Inner apartments can't be negative!");
+        } catch (InvalidChoice e)
+        {
+            System.out.println(e.getMessage());
+            return false;
+        }
 
         return true;
     }
 
     private String enterAssetData()
     {
-        System.out.println("Please enter the details of the asset as AREA,PRICE,SOLD,STREET,BOULEVARD,INNER APARTMENTS");
+        System.out.println("Please enter the details of the asset as AREA,PRICE,SOLD,BOULEVARD,STREET,INNER APARTMENTS");
+        System.out.println("For Example:");
         System.out.println("Without inner apartments: 60,660000,true,2,3");
         System.out.println("With inner apartments: 60,660000,true,2,3,5");
-        return reader.nextLine();
+        reader = new Scanner(System.in);
+        String s = reader.nextLine();
+        return s;
     }
 
-    public void updateAsset()
+    /**
+     * This function updates an asset.
+     * @return true if the asset updated successfully. Otherwise, returns false.
+     */
+    public boolean updateAsset()
     {
-        authorize(Role.Agent);
-        if (listOfAssets == null)
-            throw new NullPointerException("No assets available!");
+        if (!authorize(Role.Agent))
+            return false;
 
-        System.out.println("Select the number of asset that you want to update");
         showAssets();
-        int i = reader.nextInt();
-        Asset asset = listOfAssets.get(i-1);
-        if (asset == null)
-            throw new NullPointerException("Asset is null!");
+        if (listOfAssets.isEmpty())
+            return false;
 
-        String line = enterAssetData();
-        while (!validLine(line))
+        System.out.println("\nSelect the number of asset that you want to update. To cancel enter 0");
+        int i = makeChoice(listOfAssets.size());
+
+//        try {
+//            if (i > listOfAssets.size() || i < -1)
+//                throw new InvalidChoice("The given input is not in range!");
+//        } catch (InvalidChoice e)
+//        {
+//            System.out.println(e.getMessage());
+//            return false;
+//        }
+
+        if (i == 0)
         {
-            System.out.println("Update failed!");
-            line = enterAssetData();
+            System.out.println("Update canceled!");
+            return false;
         }
 
+        Asset asset = listOfAssets.get(i-1);
+        String line = enterAssetData();
+        if (!validLine(line))
+            return false;
+
+//        while (!validLine(line))
+//        {
+//            System.out.println("Update failed!");
+//            line = enterAssetData();
+//        }
+
         String[] stringAsset = line.split(",");
-        double area = Double.parseDouble(stringAsset[0]);
+        int area = Integer.parseInt(stringAsset[0]);
         int price = Integer.parseInt(stringAsset[1]);
         boolean sold = Boolean.parseBoolean(stringAsset[2]);
-        int street = Integer.parseInt(stringAsset[3]);
-        int boulevard = Integer.parseInt(stringAsset[4]);
-        int innerApartments = Integer.parseInt(stringAsset[5]);
+        int boulevard = Integer.parseInt(stringAsset[3]);
+        int street = Integer.parseInt(stringAsset[4]);
+        int innerApartments = 0;
+        if (stringAsset.length == 6)
+            innerApartments = Integer.parseInt(stringAsset[5]);
 
         // update
         asset.setArea(area);
@@ -420,6 +445,7 @@ public class RealEstate {
         asset.setInnerApartments(innerApartments);
         updateFile();
         initBuildingsList();
+        return true;
     }
 
     //
@@ -429,37 +455,55 @@ public class RealEstate {
     /**
      * This function prints all the assets.
      */
-    public void showAssets()
+    public boolean showAssets()
     {
-        //authorize(Role.Buyer);
         if (listOfAssets.isEmpty())
+        {
             System.out.println("No assets to show.");
+            return false;
+        }
 
         else
         {
-            System.out.println("Area | Price | Is sold? | Address");
+            //System.out.println("Area | Price | Is sold? | Address");
             for (int i = 0; i < listOfAssets.size(); i++)
                 System.out.println(i+1 + ". " + listOfAssets.get(i).toString());
         }
+
+        return true;
     }
 
     /**
      * This function removes an asset.
+     * @return true if the asset removed successfully. Otherwise, returns false.
      */
-    public void removeAsset()
+    public boolean removeAsset()
     {
         if (listOfAssets.isEmpty())
         {
             System.out.println("There are currently no assets.");
-            return;
+            return false;
         }
 
         showAssets();
-        System.out.println("\nPlease enter the number of asset that you want to remove");
-        int i = reader.nextInt();
+        System.out.println("\nPlease enter the number of asset that you want to remove. To cancel enter 0");
+        int i = makeChoice(listOfAssets.size());
+        //int i = reader.nextInt();
 
-        if (i > listOfAssets.size() || i < 1)
-            throw new InvalidChoice("The given input is not in range!");
+//        try {
+//            if (i > listOfAssets.size() || i < -1)
+//                throw new InvalidChoice("The given input is not in range!");
+//            } catch (InvalidChoice e)
+//            {
+//                System.out.println(e.getMessage());
+//                return false;
+//            }
+
+        if (i == 0)
+        {
+            System.out.println("Remove canceled!");
+            return false;
+        }
 
         Asset toRemove = listOfAssets.get(i-1);
         // remove from the building
@@ -468,7 +512,7 @@ public class RealEstate {
             Building currentBuilding = listOfBuildings.get(j);
             if(currentBuilding.isExist(toRemove))
             {
-                currentBuilding.removeAsset(toRemove);
+                currentBuilding.remove(toRemove);
                 // if the building has no apartments in it -> remove it
                 if (currentBuilding.getAssetsList().isEmpty())
                     listOfBuildings.remove(currentBuilding);
@@ -482,6 +526,7 @@ public class RealEstate {
 
         // remove from the file
         updateFile();
+        return true;
     }
 
     /**
@@ -492,6 +537,7 @@ public class RealEstate {
         Asset asset = null;
         while (true)
         {
+            reader = new Scanner(System.in);
             String line = reader.nextLine();
             asset = readAsset(line);
             if (asset != null)
@@ -505,6 +551,211 @@ public class RealEstate {
     // Authorized functions of Buyer - see assets(already implemented), buy an asset
 
 
+    // Pull assets
+
+    /**
+     * This function prints all the relevant assets based on the inputs: asset, radius and a given operation.
+     * @return true if assets displayed successfully. Otherwise, returns false.
+     */
+    public boolean pullAssets()
+    {
+        if (listOfAssets.isEmpty())
+        {
+            System.out.println("No assets available!");
+            return false;
+        }
+
+        showAssets();
+        System.out.println("\nSelect the number of asset that you want as a center. To cancel enter 0");
+        int choice = makeChoice(listOfAssets.size());
+
+        if (choice == 0)
+        {
+            System.out.println("Pull canceled!");
+            return false;
+        }
+
+        reader = new Scanner(System.in);
+        Asset asset = listOfAssets.get(choice-1);
+        System.out.println("Enter a radius as an integer");
+        int radius = reader.nextInt();
+
+        try
+        {
+            if (radius < 0)
+                throw new InvalidChoice("Radius can not be negative!");
+        } catch (InvalidChoice e)
+        {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        boolean stop = false;
+        Search search = null;
+        while (!stop)
+        {
+            System.out.println("\nShow nearby assets by:\n1. Average price\n2. Sold assets\n3. Up for sale assets\n4. Above current asset price\n5. Below current asset price\n6. Equal to current asset price\n0. Exit");
+            System.out.println("Select the number of the method that you would like to perform");
+            choice = makeChoice(0);
+            switch (choice)
+            {
+                case 1:
+                    search = new Search(new AveragePrice(listOfAssets, asset, radius));
+                    break;
+                case 2:
+                    search = new Search(new SoldAssets(listOfAssets, asset, radius));
+                    break;
+                case 3:
+                    search = new Search(new UpForSale(listOfAssets, asset, radius));
+                    break;
+                case 4:
+                    search = new Search(new AbovePrice(listOfAssets, asset, radius));
+                    break;
+                case 5:
+                    search = new Search(new BelowPrice(listOfAssets, asset, radius));
+                    break;
+                case 6:
+                    search = new Search(new EqualPrice(listOfAssets, asset, radius));
+                    break;
+                case 0:
+                    System.out.println("Exit successfully!");
+                    stop = true;
+                    break;
+                default:
+                    System.out.println("Error");
+            }
+
+            if (!stop)
+                search.executeStrategy();
+        }
+
+        return true;
+    }
+
+    private Asset selectAssetByNum(String line)
+    {
+        ArrayList<Asset> buyAssets = new ArrayList<>();
+
+        for (int i = 0; i < listOfAssets.size(); i++)
+        {
+            if (!listOfAssets.get(i).isSold())
+                buyAssets.add(listOfAssets.get(i));
+        }
+
+        if (buyAssets.isEmpty())
+        {
+            System.out.println("No assets available for purchase!");
+            return null;
+        }
 
 
+        System.out.println(line);
+        showAssets();
+        int choice = makeChoice(listOfAssets.size());
+        return listOfAssets.get(choice-1);
+    }
+
+    /**
+     * This function closes a deal between a buyer and an agent.
+     * @return true if a deal has been made. Otherwise, returns false.
+     */
+    public boolean closeDeal()
+    {
+        if (!authorize(Role.Buyer))
+            return false;
+
+        // available assets
+        ArrayList<Asset> buyAssets = new ArrayList<>();
+
+        for (int i = 0; i < listOfAssets.size(); i++)
+        {
+            if (!listOfAssets.get(i).isSold())
+                buyAssets.add(listOfAssets.get(i));
+        }
+
+        if (buyAssets.isEmpty())
+        {
+            System.out.println("No assets available for purchase!");
+            return false;
+        }
+
+        for (int i = 0; i < buyAssets.size(); i++)
+            System.out.println(i+1 + ". " + buyAssets.get(i).toString());
+
+        System.out.println("\nPlease select the number of the asset that you want to buy. To cancel enter 0");
+        int choice = makeChoice(buyAssets.size());
+
+        if (choice == 0)
+        {
+            System.out.println("Deal canceled!");
+            return false;
+        }
+
+        Asset buyAsset = buyAssets.get(choice-1);
+
+        if (agents.isEmpty())
+        {
+            System.out.println("Sorry but there are currently no agents available!");
+            return false;
+        }
+
+        System.out.println("\nEnter the agent that helped you. To cancel enter 0");
+        for (int i = 0; i < agents.size(); i++)
+            System.out.println(i+1 + ". " + agents.get(i).toString());
+
+        choice = makeChoice(agents.size());
+        Agent agent = agents.get(choice-1);
+        // no seller - what's the point
+
+        System.out.println("\nWould you like to add additional services? If so enter yes");
+        reader = new Scanner(System.in);
+        String service = reader.nextLine();
+        ArrayList<AdditionalService> services = new ArrayList<>();
+        if (service.equals("yes") || service.equals("Yes"))
+        {
+            boolean exit = false;
+            while (!exit)
+            {
+                System.out.println("Enter which service would you like to add\n1. Guarantee\n2. Clean\n3. Transfer\n4. Decorate\n0. Exit");
+                choice = makeChoice(4);
+                switch (choice)
+                {
+                    case 1:
+                        if (!services.contains(AdditionalService.Guarantee))
+                            services.add(AdditionalService.Guarantee);
+                        else
+                            System.out.println("This service is already included!");
+                        break;
+                    case 2:
+                        if (!services.contains(AdditionalService.Clean))
+                            services.add(AdditionalService.Clean);
+                        else
+                            System.out.println("This service is already included!");
+                        break;
+                    case 3:
+                        if (!services.contains(AdditionalService.Transfer))
+                            services.add(AdditionalService.Transfer);
+                        else
+                            System.out.println("This service is already included!");
+                        break;
+                    case 4:
+                        if (!services.contains(AdditionalService.Decorate))
+                            services.add(AdditionalService.Decorate);
+                        else
+                            System.out.println("This service is already included!");
+                        break;
+                    case 0:
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid input, try again!");
+                }
+            }
+        }
+
+        Deal deal = new Deal(buyAsset, (Buyer)user, agent, services);
+        buyAsset.setSold(true);
+        System.out.println("The deal:\n" + deal.toString());
+        updateFile();
+        return true;
+    }
 }

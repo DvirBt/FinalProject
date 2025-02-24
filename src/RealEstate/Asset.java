@@ -7,7 +7,7 @@ public class Asset{
 
     // Properties
 
-    private double area;
+    private int area;
     private int price; // $
     private boolean sold; // True means this asset is sold, False otherwise.
     private Address address;
@@ -17,7 +17,7 @@ public class Asset{
 
     // Constructors
 
-    public Asset(double area, int price, boolean sold, int street, int boulevard, int innerApartments)
+    public Asset(int area, int price, boolean sold, int street, int boulevard, int innerApartments)
     {
         this.area = area;
         this.price = price;
@@ -27,7 +27,7 @@ public class Asset{
     }
 
     // Getters and Setters
-    public double getArea() {
+    public int getArea() {
         return area;
     }
 
@@ -48,7 +48,7 @@ public class Asset{
         return innerApartments;
     }
 
-    public void setArea(double area) {
+    public void setArea(int area) {
         this.area = area;
     }
 
@@ -73,6 +73,11 @@ public class Asset{
         return "Area: " + this.area + " | " + "Price: " + this.price + " | " +"Sold?: " + this.sold + " | " + "Address: " + address.getBoulevard() + "," + address.getStreet();
         //+ " | " + "Inner apartments: " + innerApartments;
 
+    }
+
+    public String getValues()
+    {
+        return area+","+price+","+sold+","+ address.getBoulevard()+","+ address.getStreet()+","+innerApartments;
     }
 
 }

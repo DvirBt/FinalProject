@@ -6,5 +6,6 @@ import java.util.ArrayList;
 
 public interface IteratorStrategy {
 
-    public ArrayList<Asset> search();
+    public void search();
+    //ArrayList<Asset> assets, Asset asset
 }

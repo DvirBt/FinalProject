@@ -2,15 +2,23 @@ package RealEstate;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Building - which contains a list of apartments, address and if this building is divided or not (private building or an actual one).
+ * This class also uses the Composite design pattern.
+ */
 public class Building {
 
     private ArrayList<Asset> assetsList;
     private Address address;
+    private boolean divided;
 
     public Building(Asset asset)
     {
         assetsList = new ArrayList<>();
-        this.address = new Address(address.getStreet(), address.getBoulevard());
+        this.address = new Address(asset.getAddress().getStreet(), asset.getAddress().getBoulevard());
+        if (asset.getInnerApartments() != 0)
+            divided = false;
+        divided = true;
     }
 
     public ArrayList<Asset> getAssetsList()
@@ -22,11 +30,16 @@ public class Building {
         return address;
     }
 
+    public boolean isDivided()
+    {
+        return divided;
+    }
+
     /**
      * This function adds an asset to the building.
      * @param asset - the asset that will be added to the building.
      */
-    public void addAsset(Asset asset)
+    public void add(Asset asset)
     {
         if (asset == null)
             throw new NullPointerException("Asset is null!");
@@ -37,7 +50,7 @@ public class Building {
     /**
      * This function gets an asset and check if it's in this building.
      * @param asset - the given asset.
-     * @return true if the asset in this building. Otherwise returns false.
+     * @return true if the asset in this building. Otherwise, returns false.
      */
     public boolean isExist(Asset asset)
     {
@@ -47,7 +60,7 @@ public class Building {
         return false;
     }
 
-    public void removeAsset(Asset asset)
+    public void remove(Asset asset)
     {
         assetsList.remove(asset);
     }

@@ -17,23 +17,54 @@ public class Main {
         boolean stop = false;
         while (!stop)
         {
-            System.out.println("Available actions:\n1. See assets\n2. Edit assets\n3. Remove asset\n4. Notify agent\n5. Pull assets\n6. Close a deal\n9. Exist");
+            System.out.println("\nAvailable actions:\n1. See assets\n2. Update assets\n3. Remove asset\n4. Notify agent\n5. Pull assets\n6. Close a deal\n0. Exit");
             int choice = reader.nextInt();
+            boolean operation;
             switch (choice)
             {
                 case 1:
-                    realEstate.showAssets();
+                    operation = realEstate.showAssets();
+                    if (operation)
+                        System.out.println("Assets displayed successfully!");
+                    else
+                        System.out.println("Assets displayed failed!");
                     break;
                 case 2:
-                    realEstate.updateAsset();
+                    operation = realEstate.updateAsset();
+                    if (operation)
+                        System.out.println("Asset updated successfully!");
+                    else
+                        System.out.println("Asset updated failed!");
                     break;
                 case 3:
-                    realEstate.removeAsset();
+                    operation = realEstate.removeAsset();
+                    if (operation)
+                        System.out.println("Asset removed successfully!");
+                    else
+                        System.out.println("Asset removed failed!");
                     break;
-                case 9:
+                case 4:
+                    break;
+                case 5:
+                    operation = realEstate.pullAssets();
+                    if (operation)
+                        System.out.println("Assets pulled successfully!");
+                    else
+                        System.out.println("Asset pulled failed!");
+                    break;
+                case 6:
+                    operation = realEstate.closeDeal();
+                    if (operation)
+                        System.out.println("Deal closed successfully!");
+                    else
+                        System.out.println("Deal closed failed!");
+                    break;
+
+                case 0:
                     stop = true;
+                    break;
                 default:
-                    System.out.println("Invalid input, try again!");
+                    System.out.println("Invalid input, try again!\n");
             }
         }
 

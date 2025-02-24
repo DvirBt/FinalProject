@@ -14,14 +14,4 @@ public class Buyer extends Person{
         assets = new ArrayList<>();
 
     }
-
-    public void buyAsset(Asset asset)
-    {
-        if (asset == null)
-            throw new NullPointerException("Asset is null!");
-
-        assets.add(asset);
-
-        // CONTINUE
-    }
 }

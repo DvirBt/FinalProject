@@ -4,13 +4,14 @@ import RealEstate.Asset;
 
 import java.util.ArrayList;
 
-public class Iterator {
+public abstract class Iterator {
 
-    private final ArrayList<Asset> assets;
-    private final Asset asset;
-    private final int radius;
+    protected final ArrayList<Asset> assets;
+    protected final Asset asset;
+    protected final int radius;
 
-    public Iterator(ArrayList<Asset> assets, Asset asset, int radius) {
+    public Iterator(ArrayList<Asset> assets, Asset asset, int radius)
+    {
         this.radius = radius;
         this.asset = asset;
         this.assets = new ArrayList<>();
@@ -26,100 +27,89 @@ public class Iterator {
         }
     }
 
-    private class AveragePrice implements IteratorStrategy {
+//    public class AveragePrice implements IteratorStrategy {
+//
+//        @Override
+//        public void search()
+//        {
+//            double avg = 0;
+//            for (int i = 0; i < assets.size(); i++)
+//                avg += assets.get(i).getPrice();
+//
+//            System.out.println("The average price of the nearby assets is: " + avg / assets.size());
+//        }
+//    }
 
-        @Override
-        public ArrayList<Asset> search()
-        {
-            double avg = 0;
-            for (int i = 0; i < assets.size(); i++)
-                avg += assets.get(i).getPrice();
+//    public class SoldAssets implements IteratorStrategy {
+//
+//        @Override
+//        public void search()
+//        {
+//            for (int i = 0; i < assets.size(); i++)
+//            {
+//                if (assets.get(i).isSold())
+//                    System.out.println(assets.get(i).toString());
+//            }
+//        }
+//    }
 
-            System.out.println("The average price of the nearby assets is: " + avg / assets.size());
-            return null;
-        }
-    }
+//    public class UpForSale implements IteratorStrategy {
+//
+//        @Override
+//        public void search()
+//        {
+//            for (int i = 0; i < assets.size(); i++)
+//            {
+//                if (!assets.get(i).isSold())
+//                    System.out.println(assets.get(i).toString());
+//            }
+//        }
+//    }
 
-    private class SoldAssets implements IteratorStrategy {
+//    public class AbovePrice implements IteratorStrategy {
+//
+//        @Override
+//        public void search() {
+//            double avgPrice = asset.getPrice() / asset.getArea();
+//            for (int i = 0; i < assets.size(); i++) {
+//                double currentAvgPrice = assets.get(i).getPrice() / assets.get(i).getArea();
+//                if (currentAvgPrice > avgPrice)
+//                    System.out.println(assets.get(i).toString());
+//            }
+//        }
+//    }
 
-        @Override
-        public ArrayList<Asset> search()
-        {
-            ArrayList<Asset> returnAssets = new ArrayList<>();
-            for (int i = 0; i < assets.size(); i++) {
-                if (assets.get(i).isSold())
-                    returnAssets.add(assets.get(i));
-            }
+//    public class EqualPrice implements IteratorStrategy {
+//
+//        @Override
+//        public void search()
+//        {
+//            double avgPrice = asset.getPrice() / asset.getArea();
+//            for (int i = 0; i < assets.size(); i++)
+//            {
+//                double currentAvgPrice = assets.get(i).getPrice() / assets.get(i).getArea();
+//                if (currentAvgPrice == avgPrice)
+//                    System.out.println(assets.get(i).toString());
+//            }
+//
+//        }
+//    }
 
-            return returnAssets;
-        }
-    }
-
-    private class UpForSale implements IteratorStrategy {
-
-        @Override
-        public ArrayList<Asset> search()
-        {
-            ArrayList<Asset> returnAssets = new ArrayList<>();
-            for (int i = 0; i < assets.size(); i++) {
-                if (!assets.get(i).isSold())
-                    returnAssets.add(assets.get(i));
-            }
-
-            return returnAssets;
-        }
-    }
-
-    private class AbovePrice implements IteratorStrategy {
-
-        @Override
-        public ArrayList<Asset> search()
-        {
-            ArrayList<Asset> returnAssets = new ArrayList<>();
-            double avgPrice = asset.getPrice() / asset.getArea();
-            for (int i = 0; i < assets.size(); i++) {
-                double currentAvgPrice = assets.get(i).getPrice() / assets.get(i).getArea();
-                if (currentAvgPrice > avgPrice)
-                    returnAssets.add(assets.get(i));
-            }
-
-            return returnAssets;
-        }
-
-        private class EqualPrice implements IteratorStrategy {
-
-            @Override
-            public ArrayList<Asset> search()
-            {
-                ArrayList<Asset> returnAssets = new ArrayList<>();
-                double avgPrice = asset.getPrice() / asset.getArea();
-                for (int i = 0; i < assets.size(); i++) {
-                    double currentAvgPrice = assets.get(i).getPrice() / assets.get(i).getArea();
-                    if (currentAvgPrice == avgPrice)
-                        returnAssets.add(assets.get(i));
-                }
-
-                return returnAssets;
-            }
-        }
-
-        private class BelowPrice implements IteratorStrategy {
-
-            @Override
-            public ArrayList<Asset> search()
-            {
-                ArrayList<Asset> returnAssets = new ArrayList<>();
-                double avgPrice = asset.getPrice() / asset.getArea();
-                for (int i = 0; i < assets.size(); i++) {
-                    double currentAvgPrice = assets.get(i).getPrice() / assets.get(i).getArea();
-                    if (currentAvgPrice < avgPrice)
-                        returnAssets.add(assets.get(i));
-                }
-
-                return returnAssets;
-            }
-        }
-    }
+//    public class BelowPrice implements IteratorStrategy {
+//
+//        @Override
+//        public void search()
+//        {
+//            double avgPrice = asset.getPrice() / asset.getArea();
+//            for (int i = 0; i < assets.size(); i++)
+//            {
+//                double currentAvgPrice = assets.get(i).getPrice() / assets.get(i).getArea();
+//                if (currentAvgPrice < avgPrice)
+//                    System.out.println(assets.get(i).toString());
+//            }
+//        }
+//    }
 }
+
 
 
