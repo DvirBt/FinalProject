@@ -215,10 +215,14 @@ public class RealEstate {
             for (int j = 0; j < listOfBuildings.size(); j++)
             {
                 Building currentBuilding = listOfBuildings.get(j);
-                if (currentAsset.getAddress().equals(currentBuilding.getAddress()) && currentBuilding.isDivided())
+                if (currentAsset.getAddress().getBoulevard() == currentBuilding.getAddress().getBoulevard() && currentAsset.getAddress().getStreet() == currentBuilding.getAddress().getStreet())
                 {
-                    currentBuilding.add(currentAsset);
+                    // check if the building is private or not
+                    if (!currentBuilding.isDivided())
+                        return;
+
                     exist = true;
+                    currentBuilding.add(currentAsset);
                     break;
                 }
             }
@@ -226,6 +230,7 @@ public class RealEstate {
             if (!exist)
             {
                 Building building = new Building(currentAsset);
+                listOfBuildings.add(building);
             }
         }
     }
@@ -250,7 +255,7 @@ public class RealEstate {
         //ArrayList<Integer> innerApartments = new ArrayList<>();
 //        for (int i = 5; i < createAsset.length; i++)
 //            innerApartments.add(Integer.parseInt(createAsset[i]));
-        int innerApartments = 1;
+        int innerApartments = 0;
         if (createAsset.length == 6)
             innerApartments = Integer.parseInt(createAsset[5]);
         try{
@@ -260,35 +265,6 @@ public class RealEstate {
         }
          return null;
     }
-//
-//    /**
-//     * This function gets an asset and adds it to the list of the existing assets.
-//     * @param asset - the asset that will be added.
-//     * @return - True if the operation succeeded. Otherwise, returns False.
-//     */
-//    public boolean addAssetToFile(Asset asset)
-//    {
-//        if (user.getRole() == Role.Agent)
-//        {
-//            if (asset == null)
-//                throw new NullPointerException("Asset is null!");
-//
-//            try{
-//                BufferedWriter writer = new BufferedWriter(new FileWriter("Files/Assets.txt"));
-//                //maybe add a loop to the end of the file...
-//                writer.write(asset.toString() + "\n"); // NEED TO CHECK HERE THE STRING
-//                writer.close();
-//                listOfAssets.add(asset);
-//                return true;
-//            } catch (IOException e){
-//                e.printStackTrace();
-//            }
-//
-//            return false;
-//        }
-//
-//        return false;
-//    }
 
     /**
      * This function writes all the existing assets from the assets list to the file.
@@ -457,7 +433,20 @@ public class RealEstate {
      */
     public boolean showAssets()
     {
-        if (listOfAssets.isEmpty())
+//        if (listOfAssets.isEmpty())
+//        {
+//            System.out.println("No assets to show.");
+//            return false;
+//        }
+//
+//        else
+//        {
+//            //System.out.println("Area | Price | Is sold? | Address");
+//            for (int i = 0; i < listOfAssets.size(); i++)
+//                System.out.println(i+1 + ". " + listOfAssets.get(i).toString());
+//        }
+
+        if (listOfBuildings.isEmpty())
         {
             System.out.println("No assets to show.");
             return false;
@@ -466,8 +455,8 @@ public class RealEstate {
         else
         {
             //System.out.println("Area | Price | Is sold? | Address");
-            for (int i = 0; i < listOfAssets.size(); i++)
-                System.out.println(i+1 + ". " + listOfAssets.get(i).toString());
+            for (int i = 0; i < listOfBuildings.size(); i++)
+                System.out.println(i+1 + ". " + listOfBuildings.get(i).toString());
         }
 
         return true;
@@ -527,25 +516,6 @@ public class RealEstate {
         // remove from the file
         updateFile();
         return true;
-    }
-
-    /**
-     * this function adds an asset to the file.
-     */
-    public void addAsset()
-    {
-        Asset asset = null;
-        while (true)
-        {
-            reader = new Scanner(System.in);
-            String line = reader.nextLine();
-            asset = readAsset(line);
-            if (asset != null)
-                break;
-            System.out.println("The input is not valid. Please try again.");
-        }
-        listOfAssets.add(asset);
-        updateFile();
     }
 
     // Authorized functions of Buyer - see assets(already implemented), buy an asset

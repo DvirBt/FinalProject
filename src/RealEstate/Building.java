@@ -15,6 +15,7 @@ public class Building {
     public Building(Asset asset)
     {
         assetsList = new ArrayList<>();
+        assetsList.add(asset);
         this.address = new Address(asset.getAddress().getStreet(), asset.getAddress().getBoulevard());
         if (asset.getInnerApartments() != 0)
             divided = false;
@@ -60,18 +61,30 @@ public class Building {
         return false;
     }
 
+    /**
+     * This function removes a given asset.
+     * @param asset a given asset
+     */
     public void remove(Asset asset)
     {
         assetsList.remove(asset);
     }
 
+    /**
+     * This function returns the details of each apartment in the building.
+     * @return a string with all the details of the apartments.
+     */
     public String toString()
     {
+
+        if (!divided)
+            assetsList.getFirst().toString();
+
         String s = "";
         String fullAddress = "";
         for (int i = 0; i < assetsList.size(); i++)
         {
-            fullAddress += String.valueOf(assetsList.get(i).getInnerApartments()); // convert int to String
+            fullAddress += "," + String.valueOf(assetsList.get(i).getInnerApartments()); // convert int to String
             s += assetsList.get(i).toString() + fullAddress + "\n";
         }
 
