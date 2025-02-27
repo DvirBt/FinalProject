@@ -17,9 +17,10 @@ public class Building {
         assetsList = new ArrayList<>();
         assetsList.add(asset);
         this.address = new Address(asset.getAddress().getStreet(), asset.getAddress().getBoulevard());
-        if (asset.getInnerApartments() != 0)
+        if (asset.getInnerApartments() == 0)
             divided = false;
-        divided = true;
+        else
+            divided = true;
     }
 
     public ArrayList<Asset> getAssetsList()
@@ -78,7 +79,7 @@ public class Building {
     {
 
         if (!divided)
-            assetsList.getFirst().toString();
+            return assetsList.getFirst().toString() + "\n";
 
         String s = "";
         String fullAddress = "";

@@ -16,7 +16,7 @@ public class AveragePrice extends Iterator implements IteratorStrategy {
     {
         double avg = 0;
         for (int i = 0; i < assets.size(); i++)
-            avg += assets.get(i).getPrice();
+            avg += (double) (assets.get(i).getPrice() / assets.get(i).getArea());
 
         System.out.println("The average price of the nearby assets is: " + avg / assets.size() + "$");
     }

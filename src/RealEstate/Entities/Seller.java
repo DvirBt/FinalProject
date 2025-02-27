@@ -8,9 +8,4 @@ public class Seller extends Person{
     {
         super(firstName, lastName, Role.Seller);
     }
-
-    public void sendMessage(String message)
-    {
-
-    }
 }

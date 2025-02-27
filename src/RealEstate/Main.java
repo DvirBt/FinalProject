@@ -44,6 +44,11 @@ public class Main {
                         System.out.println("Asset removed failed!");
                     break;
                 case 4:
+                    operation = realEstate.notifyService();
+                    if (operation)
+                        System.out.println("Notify successfully!");
+                    else
+                        System.out.println("Notify failed!");
                     break;
                 case 5:
                     operation = realEstate.pullAssets();
