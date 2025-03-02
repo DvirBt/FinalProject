@@ -1,14 +1,12 @@
 package RealEstate;
 
-import RealEstate.Entities.Person;
-import RealEstate.Entities.UserFactory;
-import RealEstate.Exceptions.InvalidChoice;
-import RealEstate.RealEstate;
+import RealEstate.Exceptions.UnAuthorizedUser;
+import RealEstate.Exceptions.UnRegisteredUser;
 
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnRegisteredUser, UnAuthorizedUser {
         System.out.println("Hello!");
         // create a Scanner to read the inputs
         Scanner reader = new Scanner(System.in);
@@ -74,6 +72,5 @@ public class Main {
         }
 
         System.out.println("Exit successfully!");
-        while (true);
     }
 }

@@ -1,11 +1,21 @@
 package RealEstate.Tests;
 
+import RealEstate.Asset;
+import RealEstate.Building;
+import RealEstate.Entities.Agent;
+import RealEstate.Entities.Seller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BuildingTest extends BaseStats{
+class BuildingTest{
+
+    Agent agent = new Agent("Dvir", "Ben Tovim");
+    Seller seller = new Seller("Ori", "Amrani");
+    Asset asset = new Asset(10, 10000, true, 1, 1, 1, agent, seller);
+    Asset asset2 = new Asset(1000, 50000, false, 2, 0, 0, agent, seller);
+    Building building = new Building(asset);
 
     @Test
     @DisplayName("This test checks if a given asset exists in this building")
@@ -20,9 +30,11 @@ class BuildingTest extends BaseStats{
     }
 
     @Test
+    @DisplayName("This test checks the building's toString properties")
     void testToString()
     {
-        String expected;
-        //assertEquals(expected, );
+        String expected = "Area: 10 | Price: 10000 | Sold?: true | Address: 1,1,1\n";
+        String result = building.toString();
+        assertEquals(expected, result);
     }
 }

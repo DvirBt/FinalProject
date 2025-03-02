@@ -1,5 +1,8 @@
 package RealEstate.Entities;
 
+/**
+ * This Enum represents a Role by a number.
+ */
 public enum Role {
     Agent(1),
     Buyer(2),
@@ -9,23 +12,5 @@ public enum Role {
     Role(int role)
     {
         this.role = role;
-    }
-
-    /**
-     * This functions gets an integer and returns it's related Role.
-     * @param i - the integer
-     * @return - the role.
-     */
-    public static Role SelectRoleByInteger(int i)
-    {
-        switch (i)
-        {
-            case 1: return Role.Agent;
-            case 2: return Role.Buyer;
-            case 3: return Role.Seller;
-            default:
-        }
-
-        return null;
     }
 }

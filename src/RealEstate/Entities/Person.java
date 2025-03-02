@@ -1,14 +1,16 @@
 package RealEstate.Entities;
 
-import Notification.Observer;
+import RealEstate.Notification.Observer;
 
 import java.util.ArrayList;
 
 /**
- * This class represents a person in the system.
+ * This class represents a person in the system which contains an id, full name, his meaning for the system and all the messages that was sent to him.
  */
 public abstract class Person implements Observer {
 
+    protected static int ID = 1; // each person will have unique id
+    protected int id;
     protected String firstName;
     protected String lastName;
     protected Role role;
@@ -16,6 +18,7 @@ public abstract class Person implements Observer {
 
     public Person(String firstName, String lastName)
     {
+        id = ID++;
         this.firstName = firstName;
         this.lastName = lastName;
         role = null;
@@ -35,10 +38,17 @@ public abstract class Person implements Observer {
     public String getFirstName() {
         return firstName;
     }
-
     public String getLastName()
     {
         return lastName;
+    }
+    public int getId()
+    {
+        return id;
+    }
+
+    public ArrayList<String> getNotifications() {
+        return notifications;
     }
 
     /**
@@ -59,6 +69,10 @@ public abstract class Person implements Observer {
         return firstName + " "  +lastName;
     }
 
+    /**
+     * This function gets a message and delivers it to this person
+     * @param message the message that was sent by a owner of an asset.
+     */
     @Override
     public void update(String message)
     {

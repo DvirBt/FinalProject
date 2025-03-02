@@ -1,9 +1,8 @@
 package RealEstate.Strategy;
 
-import RealEstate.Asset;
-
-import java.util.ArrayList;
-
+/**
+ * This class gets a different strategy each time and executes it when the function executeStrategy is called.
+ */
 public class Search {
 
     private IteratorStrategy strategy;
@@ -13,8 +12,8 @@ public class Search {
         this.strategy = strategy;
     }
 
-    public void executeStrategy()
+    public double executeStrategy()
     {
-        strategy.search();
+        return strategy.search();
     }
 }

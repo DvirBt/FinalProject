@@ -6,21 +6,18 @@ import RealEstate.Entities.Seller;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Deal which contains an asset, the total price of the deal and a list of all the additional services that the buyer required.
+ */
 public class Deal {
 
     private Asset asset;
-    private Buyer buyer;
-    //private Seller seller;
-    private Agent agent;
     private int total_price;
     private ArrayList<AdditionalService> additionalServices;
 
-    public Deal(Asset asset, Buyer buyer, Agent agent, ArrayList<AdditionalService> additionalServices) // Seller seller,
+    public Deal(Asset asset, ArrayList<AdditionalService> additionalServices)
     {
         this.asset = asset;
-        this.buyer = buyer;
-        //this.seller = seller;
-        this.agent = agent;
         total_price = asset.getPrice();
         this.additionalServices = additionalServices;
 
@@ -28,12 +25,10 @@ public class Deal {
             total_price += this.additionalServices.get(i).getCost();
     }
 
-
-    public ArrayList<AdditionalService> getAdditionalServices()
-    {
-        return additionalServices;
-    }
-
+    /**
+     * This function collects all the data of this deal and returns a string of it.
+     * @return a string of all the relevant information of this deal.
+     */
     public String toString()
     {
         String additionalService = "";
@@ -47,7 +42,7 @@ public class Deal {
             additionalService += additionalServices.getLast().getServiceType();
         }
 
-        String line = "Buyer: " + buyer.toString() + "\nAgent: " + agent.toString() + "\nAsset: " + asset.toString() + "\nAdditional services: " + additionalService + "\nTotal price: " + total_price;
+        String line = "Buyer: " + asset.getOwner().toString() + "\nAgent: " + asset.getAgentOfAsset().toString() + "\nAsset: " + asset.toString() + "\nAdditional services: " + additionalService + "\nTotal price: " + total_price;
 
         return line;
     }

@@ -9,28 +9,26 @@ public class Address {
     private int street;
     private int boulevard;
 
-    // Constructors
-    public Address()
-    {
-        street = 0;
-        boulevard = 0;
-    }
-
     public Address(int street, int boulevard)
     {
         this.street = street;
         this.boulevard = boulevard;
     }
 
-    // Getters
-
     public int getStreet()
     {
         return street;
     }
-
     public int getBoulevard()
     {
         return boulevard;
+    }
+
+    public void setStreet(int street) {
+        this.street = street;
+    }
+
+    public void setBoulevard(int boulevard) {
+        this.boulevard = boulevard;
     }
 }

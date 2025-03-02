@@ -1,11 +1,9 @@
 package RealEstate.Strategy;
 
-import RealEstate.Asset;
-
-import java.util.ArrayList;
-
+/**
+ * This interface is a part of Strategy design pattern.
+ */
 public interface IteratorStrategy {
 
-    public void search();
-    //ArrayList<Asset> assets, Asset asset
+    public double search();
 }

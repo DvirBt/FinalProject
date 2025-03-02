@@ -1,7 +1,9 @@
 package RealEstate;
 
-import java.util.ArrayList;
-
+/**
+ * This Enum represents an Additional Service which is a service that is offered by an agent to a buyer
+ * when a deal is on the process. This Enum contains a name and the cost of the service.
+ */
 public enum AdditionalService {
     Guarantee("Guarantee", 1000),
     Clean("Clean", 2500),
@@ -24,23 +26,5 @@ public enum AdditionalService {
 
     public int getCost() {
         return cost;
-    }
-
-
-    /**
-     * This function gets a number and returns it's related service.
-     * @param i - the number.
-     * @return the matching service.
-     */
-    public static AdditionalService getServiceByInt(int i)
-    {
-        switch (i)
-        {
-            case 1: return AdditionalService.Guarantee;
-            case 2: return AdditionalService.Clean;
-            case 3: return AdditionalService.Transfer;
-            case 4: return AdditionalService.Decorate;
-            default: return null;
-        }
     }
 }
